@@ -1,3 +1,10 @@
+def least_squares(basis, y):
+    """Returns the least-squares solution x (closest approximation) to the system Ax=y,
+    where A is the matrix with columns in basis."""
+    obasis = gsp(basis)
+    return proj(obasis, y)
+
+
 def gsp(basis):
     if len(basis) == 1:
         return basis
@@ -9,16 +16,21 @@ def gsp(basis):
 
 def orthog(obasis, y):
     """Returns the orthogonal component of y with respect to orthogonal obasis."""
-    proj = []  # list of projections of y onto each vector of obasis.
+    for p in proj(obasis, y):
+        y = sub(y, p)
+    return y
+
+
+def proj(obasis, y):
+    """Returns the projection of y onto the vector space spanned by vectors in orthogonal obasis."""
+    pr = []  # list of projections of y onto each vector of obasis.
     for u in obasis:
         v = []  # proj_u(y)
         c = dot(u, y) / dot(u, u)
         for x in u:  # element of basis vector
             v.append(c * x)
-        proj.append(v)
-    for p in proj:
-        y = sub(y, p)
-    return y
+        pr.append(v)
+    return pr
 
 
 def sub(y, p):
