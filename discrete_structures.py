@@ -10,15 +10,36 @@ def powerset(iterable):
 class Automaton:
     def __init__(self, states, alphabet, transitions, initial, final, typ):
         self.states = states  # set of states
+acc        x = None  # in case states is empty
+        for x in states:
+            break
+        self.state_type = type(x)  # a really sad way of getting the type of a state.
         self.alphabet = alphabet  # set of possible chars
         self.transitions = transitions  # dfa {(s_i,a): s_f}, nfa {(s_i,a): {S_f}}
         self.initial = initial  # int
-        self.final = final
-        self.type = typ  # 'dfa' or 'nfa'
+        self.final = final  # set of states
+        self.type = typ  # 'dfa' or 'nfa' - make this an enum?
+
+    def accept(self, x):
+        """Returns true if string x is accepted by the automaton; false otherwise."""
+        curr = {self.initial}
+        for a in x:
+            a = int(a)
+            new_curr = set()
+            for state in curr:
+                if self.type == 'dfa' and self.state_type is int:
+                    new_curr.add(self.transitions[state, a])
+                elif self.type == 'nfa':
+                    if (state, a) in self.transitions.keys():
+                        new_curr = new_curr.union(self.transitions[state, a])
+                else:
+                    print('i made an oopsie')
+            curr = new_curr
+        return True if len(curr.intersection(self.final)) > 0 else False
 
     def convert(self, new_type):
         """Converts from one type of automaton to the other."""
-        new_type = new_type.lower()
+        new_type = new_type.lower().strip()
         if self.type == new_type:
             print('This automaton is already a', new_type, '!')
             return None
@@ -31,15 +52,15 @@ class Automaton:
             states = powerset(self.states)
             new_f = {}
             final = set()
-            for S in states:
+            for state_set in states:
                 for a in self.alphabet:
                     next_S = set()
-                    for s in S:
-                        if (s, a) in self.transitions.keys():
-                            next_S = next_S.union(self.transitions[s, a])
-                        if s in self.final:
-                            final.add(S)
-                    new_f[(S, a)] = next_S
+                    for state in state_set:
+                        if (state, a) in self.transitions.keys():
+                            next_S = next_S.union(self.transitions[state, a])
+                        if state in self.final:
+                            final.add(state_set)
+                    new_f[(state_set, a)] = next_S
             return Automaton(states, self.alphabet, new_f, {self.initial}, final, new_type)
         else:
             print('Not a valid automaton type')
@@ -60,7 +81,7 @@ class Automaton:
         print(str.format("{:>" + str(s_col) + "}{:^" + str(a_col) + "}{:<" + str(S_col) + "}", 's', 'a', 'S\''))
         for x, a in self.transitions.keys():
             if self.type == 'dfa':
-                if type(x) is int:
+                if self.state_type is int:
                     print(str.format("{:>" + str(s_col) + "}{:^" + str(a_col) + "}{:<" + str(S_col) + "}",
                                      x, a, self.transitions[x, a]))
                 else:
@@ -84,4 +105,9 @@ if __name__ == "__main__":
     nfa.print()
     print('Converting NFA to DFA:')
     nfa.convert('dfa').print()
-
+    print(nfa.accept('000001'))  # True
+    print(nfa.accept('000001111'))  # True
+    print(nfa.accept('0'))  # True
+    print(nfa.accept('00'))  # True
+    print(nfa.accept('1'))  # False
+    print(nfa.accept('11111'))  # False
