@@ -54,8 +54,28 @@ def least_squares_qr():  # TODO: implement lss with A^TA form, QR form
     pass
 
 
+def pretty(matrix):
+    """Pretty prints matrix, given input as a list of columns in the matrix."""
+    if len(matrix) == 0 or len(matrix[0]) == 0:
+        print('empty matrix')
+    col_widths = [0 for j in range(len(matrix))]
+    for j in range(len(matrix)):
+        for elem in matrix[j]:
+            col_widths[j] = len(str(elem)) if len(str(elem)) > col_widths[j] else col_widths[j]
+    for i in range(len(matrix[0])):
+        row = '['
+        for j in range(len(matrix) - 1):
+            elem = str(matrix[j][i])
+            row += elem + (' ' * (col_widths[j] - len(elem) + 1))
+        elem = str(matrix[len(matrix) - 1][i])
+        row += elem + (' ' * (col_widths[len(matrix) - 1] - len(elem))) + ']'
+        print(row)
+
+
 if __name__ == "__main__":
     # inp = input("Input a list of vectors in the same dimension, ex. [[1,0],[0,1]]")
     # convert to list of tuples
-    b = [[1, 1, 1], [1, 2, 0], [2, 0, 1]]
-    print(gsp(b))
+    b = [[1, 1, 1], [1, 12345, 0], [2, 0, 1]]
+    print('Orthogonal basis for', b, ':')
+    pretty(gsp(b))
+    pretty(b)

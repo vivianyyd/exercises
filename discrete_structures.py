@@ -10,7 +10,7 @@ def powerset(iterable):
 class Automaton:
     def __init__(self, states, alphabet, transitions, initial, final, typ):
         self.states = states  # set of states
-acc        x = None  # in case states is empty
+        x = None  # in case states is empty
         for x in states:
             break
         self.state_type = type(x)  # a really sad way of getting the type of a state.
