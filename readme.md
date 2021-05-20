@@ -8,7 +8,7 @@ Linear algebra
 
 - [x] Least squares (projection method)
 
-- [ ] Pretty print matrices
+- [x] Pretty print matrices
 
 - [ ] Least squares (QR method)
 
@@ -24,9 +24,9 @@ Automata
 
 - [x] Convert NFA -> DFA
 
-- [ ] Process input to automata (accept strings)
+- [x] Process input to automata (accept strings)
 
-- [ ] Something interesting with the pumping lemma
+- [ ] Produce regex representation of language recognized
 
 Number theory
 
