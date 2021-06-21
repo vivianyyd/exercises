@@ -1,3 +1,6 @@
+import math
+
+
 def sub(y, p):
     """Returns the difference of two vectors of the same dimension."""
     v = []
@@ -51,6 +54,14 @@ def least_squares_proj(basis, y):
 
 
 def least_squares_qr():  # TODO: implement lss with A^TA form, QR form
+    pass
+
+
+def det_cofactor(a):
+    """Recursively computes the determinant of a matrix using cofactor expansion."""
+    for i in range(a[0]):
+        # cof = math.pow(-1, i) *
+        pass
     pass
 
 

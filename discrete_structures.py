@@ -103,6 +103,16 @@ if __name__ == "__main__":
     nfa_f = {(0, 0): {0, 1}, (1, 1): {1}}
     nfa = Automaton({0, 1}, {0, 1}, nfa_f, 0, {1}, 'nfa')
     nfa.print()
+    # more examples
+    mf = {(0, 0): {1, 2}, (1, 0): {1}, (1, 1): {2}, (2, 1): {2}}
+    m = Automaton({0, 1, 2}, {0, 1}, mf, 0, {0, 2}, 'nfa')
+    tm = m.convert('dfa')
+    tm.print()
+    tmpf = tm.states.difference(tm.final)
+    tmp = Automaton(tm.states, tm.alphabet, tm.transitions, 0, tmpf, 'dfa')
+    tmp.print()
+    mp = tmp.convert('nfa')
+    print(mp)
     print('Converting NFA to DFA:')
     nfa.convert('dfa').print()
     print(nfa.accept('000001'))  # True
@@ -111,3 +121,10 @@ if __name__ == "__main__":
     print(nfa.accept('00'))  # True
     print(nfa.accept('1'))  # False
     print(nfa.accept('11111'))  # False
+    print('Discussion section exercise:')
+    nfa_f_2 = {(0, 0): {1}, (0, 1): {1, 2}, (1, 0): {1}, (1, 1): {1},
+               (2, 0): {3}, (2, 1): {2}, (3, 0): {3}, (3, 1): {3}}
+    nfa_2 = Automaton({0, 1, 2, 3}, {0, 1}, nfa_f_2, 0, {1, 2, 3}, 'nfa')
+    dfa_2 = nfa_2.convert('dfa')
+    dfa_2.print()
+    print(len(dfa_2.final))

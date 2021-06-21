@@ -8,7 +8,9 @@ Linear algebra
 
 - [x] Least squares (projection method)
 
-- [x] Pretty print matrices
+- [x] Pretty print 
+
+- [x] Parse to Wolfram Alpha compatible
 
 - [ ] Least squares (QR method)
 
