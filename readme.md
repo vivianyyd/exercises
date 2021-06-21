@@ -20,6 +20,8 @@ Linear algebra
 
 - [ ] Determinant from cofactor expansion
 
+- [ ] Re-implement with numpy
+
 Discrete structures
 ---
 Automata

@@ -53,40 +53,60 @@ def least_squares_proj(basis, y):
     return proj(obasis, y)
 
 
-def least_squares_qr():  # TODO: implement lss with A^TA form, QR form
+def least_squares_qr():
+    pass
+
+
+def all_but(a, i):
+    """
+    Returns the matrix formed by removing row 0 and column i of a.
+    """
+    res = []
+    for row in a[1:]:
+        res.append(row[:i] + row[i + 1:])
+    return res
     pass
 
 
 def det_cofactor(a):
     """Recursively computes the determinant of a matrix using cofactor expansion."""
+    cof = 0
     for i in range(a[0]):
-        # cof = math.pow(-1, i) *
-        pass
-    pass
+        cof += math.pow(-1, i) * a[0][i] * det_cofactor(all_but(a, i))
+    return cof
 
 
 def pretty(matrix):
     """Pretty prints matrix, given input as a list of columns in the matrix."""
-    if len(matrix) == 0 or len(matrix[0]) == 0:
+    if not hasattr(matrix[0], '__iter__'):
+        print(matrix)
+    elif len(matrix) == 0 or len(matrix[0]) == 0:
         print('empty matrix')
-    col_widths = [0 for j in range(len(matrix))]
-    for j in range(len(matrix)):
-        for elem in matrix[j]:
-            col_widths[j] = len(str(elem)) if len(str(elem)) > col_widths[j] else col_widths[j]
-    for i in range(len(matrix[0])):
-        row = '['
-        for j in range(len(matrix) - 1):
-            elem = str(matrix[j][i])
-            row += elem + (' ' * (col_widths[j] - len(elem) + 1))
-        elem = str(matrix[len(matrix) - 1][i])
-        row += elem + (' ' * (col_widths[len(matrix) - 1] - len(elem))) + ']'
-        print(row)
+    else:
+        col_widths = [0 for j in range(len(matrix))]
+        for j in range(len(matrix)):
+            for elem in matrix[j]:
+                col_widths[j] = len(str(elem)) if len(str(elem)) > col_widths[j] else col_widths[j]
+        for i in range(len(matrix[0])):
+            row = '['
+            for j in range(len(matrix) - 1):
+                elem = str(matrix[j][i])
+                row += elem + (' ' * (col_widths[j] - len(elem) + 1))
+            elem = str(matrix[len(matrix) - 1][i])
+            row += elem + (' ' * (col_widths[len(matrix) - 1] - len(elem))) + ']'
+            print(row)
 
 
 if __name__ == "__main__":
+    m = [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+    pretty(m)
+    print('All but 0th row, 1st column:')
+    pretty(all_but(m, 1))
+
     # inp = input("Input a list of vectors in the same dimension, ex. [[1,0],[0,1]]")
     # convert to list of tuples
+
     b = [[1, 1, 1], [1, 12345, 0], [2, 0, 1]]
-    print('Orthogonal basis for', b, ':')
-    pretty(gsp(b))
+    print('Orthogonal basis for')
     pretty(b)
+    pretty(gsp(b))
