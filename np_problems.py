@@ -53,7 +53,7 @@ sub
 5 6
 6 9
 '''
-print(submatrix(3, [1, 5, 9, 2, 3, 6]6, [1, 2]))
+# print(submatrix(3, [1, 5, 9, 2, 3, 6], [1, 2]))
 
 '''
 00 01 02 03 04
@@ -64,7 +64,7 @@ print(submatrix(3, [1, 5, 9, 2, 3, 6]6, [1, 2]))
 '''
 
 
-def overlap(a):
+def overlap(a, k):
     """
     Given a m*n array of Fortran layout (col major), create a **view** of (m + k) * n, 
     where the first k elements of each column overlaps the last k elements of the previous column. 
@@ -75,12 +75,24 @@ def overlap(a):
     9 10 11 12      1  2  3  4
                     5  6  7  8
                     9 10 11 12
+    each column starts from
     """
-    a = np.asarray([[1,  2,  3,  4], [5,  6,  7,  8], [9, 10, 11, 12]])
-    # TODO get these vals
-    m = 3
-    n = 4
-    k = 2
-    # traverse backwards for each column
-    # x = np.lib.stride_tricks.as_strided(a, ((m + k), n), strides, writeable=False)
+    # TODO fix
+    offset = np.ndarray(a.shape, dtype=a.dtype, offset=-2 * k * a.shape[0], buffer=a.data, order='F')
+    print(offset)
+    return np.lib.stride_tricks.as_strided(offset, shape=((a.shape[0] + k), a.shape[1]), strides=offset.strides, writeable=False)
 
+
+# nonworking example with function call
+b = np.asarray([[1,  2,  3,  4], [5,  6,  7,  8], [9, 10, 11, 12]], order='F')
+print(b)
+print(overlap(b, 2))
+
+# working example
+c = np.asarray([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]], order='F')
+print(c)
+j = 2
+w = np.ndarray(c.shape, dtype=c.dtype, offset=-2 * j * c.shape[0], buffer=c.data, order='F')
+x = np.lib.stride_tricks.as_strided(w, shape=((c.shape[0] + j), c.shape[1]), strides=w.strides, writeable=False)
+print(x)
+# TODO as_strided source
